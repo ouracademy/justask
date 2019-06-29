@@ -2,12 +2,8 @@ package org.ouracademy.justask;
 
 import java.awt.AWTException;
 import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -44,8 +40,7 @@ public class JustaskApplication implements CommandLineRunner {
 	}
 
 	/**
-	 * Performs microphomericanne streaming speech recognition with a duration of 1
-	 * minute.
+	 * Performs microphone streaming speech recognition with a duration of 1 minute.
 	 */
 	public void streamingMicRecognize() throws Exception {
 
