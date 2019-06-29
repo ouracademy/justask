@@ -19,7 +19,7 @@ public class Interpreter {
         var args = text.split(" ")[1];
 
         for (int charUnicodeIndex : args.chars().toArray()) {
-            if (command.equals("write")) {
+            if (command.equals("type")) {
                 if ('.' == (char) charUnicodeIndex) {
                     type(robot, KeyEvent.VK_PERIOD);
                 } else {

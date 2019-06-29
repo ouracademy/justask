@@ -24,7 +24,7 @@ public class InterpreterTests {
     public void interpret(String text, List<Integer> keysPressed) {
         var robot = mock(Robot.class);
         var interpreter = new Interpreter(robot);
-        interpreter.interpret("write " + text);
+        interpreter.interpret("type " + text);
 
         keysPressed.forEach(x -> verify(robot).keyPress(x));
     }

@@ -40,9 +40,7 @@ public class JustaskApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-
 		streamingMicRecognize();
-
 	}
 
 	/**
@@ -61,58 +59,19 @@ public class JustaskApplication implements CommandLineRunner {
 				}
 
 				public void onResponse(StreamingRecognizeResponse response) {
-					List<StreamingRecognitionResult> r = response.getResultsList();
 
-					String s = r.stream().map(x -> x.getAlternatives(0).getTranscript()).collect(Collectors.joining())
-							.trim().toLowerCase();
+					String text = response.getResultsList().stream().map(x -> x.getAlternatives(0).getTranscript())
+							.collect(Collectors.joining()).trim().toLowerCase();
 
-					System.out.printf("Transcript : %s\n", s);
+					System.out.println("Transcript: '" + text + "'");
 
 					try {
-
-						Robot robot = new Robot();
-						System.out.print("'" + s + "'");
-
-						if (s.startsWith("delete")) {
-
-							String args = s.split(" ").length == 1 ? "" : s.split(" ")[1];
-							if (!args.isEmpty()) {
-								long repeat = Integer.parseInt(args);
-								LongStream.rangeClosed(1, repeat).sequential()
-										.forEach(x -> type(robot, KeyEvent.VK_SHIFT, KeyEvent.VK_BACK_SPACE));
-							} else {
-								type(robot, KeyEvent.VK_SHIFT, KeyEvent.VK_BACK_SPACE);
-							}
-
-						} else if (s.startsWith("comment")) {
-							type(robot, KeyEvent.VK_CONTROL, KeyEvent.VK_K);
-							type(robot, KeyEvent.VK_CONTROL, KeyEvent.VK_C);
-						} else if (s.startsWith("remove comment")) {
-							type(robot, KeyEvent.VK_CONTROL, KeyEvent.VK_K);
-							type(robot, KeyEvent.VK_CONTROL, KeyEvent.VK_U);
-						} else if (s.equals("down"))
-							type(robot, KeyEvent.VK_DOWN);
-						else if (s.equals("up"))
-							type(robot, KeyEvent.VK_UP);
-						else if (s.equals("."))
-							type(robot, KeyEvent.VK_PERIOD);
-						else if (s.equals("enter"))
-							type(robot, KeyEvent.VK_ENTER);
-						else {
-							for (int charUnicodeIndex : s.chars().toArray()) {
-								int unicodeA = 97;
-								type(robot, charUnicodeIndex - unicodeA + KeyEvent.VK_A);
-							}
-						}
-
+						var interpreter = new Interpreter(new Robot());
+						interpreter.interpret(text);
 					} catch (AWTException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
-					// Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-					// Transferable transferable = new StringSelection(s);
-					// clipboard.setContents(transferable, null);
 
 					responses.add(response);
 				}
@@ -184,11 +143,5 @@ public class JustaskApplication implements CommandLineRunner {
 			System.out.println(e);
 		}
 		responseObserver.onComplete();
-	}
-
-	private void type(Robot robot, int... keys) {
-		robot.delay(40);
-		Arrays.stream(keys).forEach(i -> robot.keyPress(i));
-		Arrays.stream(keys).forEach(i -> robot.keyRelease(i));
 	}
 }
