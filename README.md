@@ -7,7 +7,7 @@ A simple command over voice application.
 To run this project as any simple spring boot maven application do:
 
 ```sh
-export GOOGLE_APPLICATION_CREDENTIALS=ABSOLUTE PATH/service-account-file.json
+export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/src/main/resources/service-account-file.json
 mvn spring-boot:run
 ```
 
