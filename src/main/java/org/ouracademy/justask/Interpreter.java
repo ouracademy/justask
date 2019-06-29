@@ -2,8 +2,16 @@ package org.ouracademy.justask;
 
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import static java.util.Map.entry;
+
+import com.google.common.io.CharStreams;
 
 /**
  * Interpreter
@@ -11,9 +19,14 @@ import java.util.List;
 public class Interpreter {
     Robot robot;
     List<String> commands = List.of("type");
+    public Map<Character, Integer> charToKeyboardMap;
 
     public Interpreter(Robot robot) {
         this.robot = robot;
+        this.charToKeyboardMap = Stream
+                .concat(Stream.of(entry('.', KeyEvent.VK_PERIOD), entry(' ', KeyEvent.VK_SPACE)),
+                        IntStream.rangeClosed('a', 'z').mapToObj(x -> entry((char) x, x - 'a' + KeyEvent.VK_A)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public void interpret(String text) {
@@ -22,16 +35,9 @@ public class Interpreter {
 
         System.out.println("'" + args + "'");
         for (int charUnicodeIndex : args.chars().toArray()) {
-            if ('.' == (char) charUnicodeIndex) {
-                type(robot, KeyEvent.VK_PERIOD);
-            } else if (' ' == (char) charUnicodeIndex) {
-                type(robot, KeyEvent.VK_SPACE);
-            } else {
-                int unicodeA = 97;
-                type(robot, charUnicodeIndex - unicodeA + KeyEvent.VK_A);
-            }
+            var character = (char) charUnicodeIndex;
+            type(robot, charToKeyboardMap.get(character));
         }
-
     }
 
     private void type(Robot robot, int... keys) {
