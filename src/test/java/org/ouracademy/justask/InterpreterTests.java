@@ -31,6 +31,7 @@ public class InterpreterTests {
 
     static Stream<Arguments> interpret() {
         return Stream.of(arguments("hi", List.of(KeyEvent.VK_H, KeyEvent.VK_I)),
-                arguments("c.", List.of(KeyEvent.VK_C, KeyEvent.VK_PERIOD)));
+                arguments("c.", List.of(KeyEvent.VK_C, KeyEvent.VK_PERIOD)),
+                arguments("a b", List.of(KeyEvent.VK_A, KeyEvent.VK_SPACE, KeyEvent.VK_B)));
     }
 }

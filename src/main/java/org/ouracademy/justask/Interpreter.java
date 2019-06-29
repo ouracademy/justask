@@ -3,6 +3,7 @@ package org.ouracademy.justask;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Interpreter
@@ -16,12 +17,15 @@ public class Interpreter {
 
     public void interpret(String text) {
         var command = text.split(" ")[0];
-        var args = text.split(" ")[1];
+        var args = text.substring(command.length() + 1);
 
+        System.out.println("'" + args + "'");
         for (int charUnicodeIndex : args.chars().toArray()) {
             if (command.equals("type")) {
                 if ('.' == (char) charUnicodeIndex) {
                     type(robot, KeyEvent.VK_PERIOD);
+                } else if (' ' == (char) charUnicodeIndex) {
+                    type(robot, KeyEvent.VK_SPACE);
                 } else {
                     int unicodeA = 97;
                     type(robot, charUnicodeIndex - unicodeA + KeyEvent.VK_A);
