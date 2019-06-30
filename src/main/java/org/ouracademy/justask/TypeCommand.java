@@ -4,7 +4,6 @@ import static java.util.Map.entry;
 
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -35,11 +34,5 @@ public class TypeCommand extends Command {
             var character = (char) charUnicodeIndex;
             type(robot, charToKeyboardMap.get(character));
         }
-    }
-
-    private void type(Robot robot, int... keys) {
-        robot.delay(40);
-        Arrays.stream(keys).forEach(i -> robot.keyPress(i));
-        Arrays.stream(keys).forEach(i -> robot.keyRelease(i));
     }
 }
