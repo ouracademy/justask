@@ -14,7 +14,8 @@ public class Interpreter {
 
     public Interpreter(Robot robot) {
         this.robot = robot;
-        this.commands = List.of(new TypeCommand(), new Delete(), new Replicate(this), new Enter(), new Select());
+        this.commands = List.of(new TypeCommand(), new Delete(), new Replicate(this), new Enter(), new Select(),
+                new Open());
     }
 
     public void interpret(String text) {
