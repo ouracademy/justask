@@ -3,6 +3,7 @@ package org.ouracademy.justask;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.sound.sampled.AudioFormat;
@@ -65,6 +66,10 @@ public class JustaskApplication implements CommandLineRunner {
 						interpreter.interpret(text);
 					} catch (AWTException e) {
 						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NoSuchElementException e) {
+						System.out.println("Sorry didn't found command");
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 

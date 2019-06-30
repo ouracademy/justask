@@ -14,12 +14,13 @@ public class Interpreter {
 
     public Interpreter(Robot robot) {
         this.robot = robot;
-        this.commands = List.of(new TypeCommand(), new Delete(), new Replicate(this));
+        this.commands = List.of(new TypeCommand(), new Delete(), new Replicate(this), new Enter());
     }
 
     public void interpret(String text) {
         var command = this.commands.stream().filter(x -> text.startsWith(x.getName())).findFirst().orElseThrow();
-        var args = text.substring(command.getName().length() + 1);
+        var position = command.getName().length() + 1;
+        var args = text.length() > position ? text.substring(position) : "";
 
         System.out.println("'" + args + "'");
         command.execute(robot, args);
