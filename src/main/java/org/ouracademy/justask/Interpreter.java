@@ -1,48 +1,28 @@
 package org.ouracademy.justask;
 
 import java.awt.Robot;
-import java.awt.event.KeyEvent;
-import java.util.AbstractMap;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import static java.util.Map.entry;
 
-import com.google.common.io.CharStreams;
+import org.ouracademy.justask.TypeCommand;
 
 /**
  * Interpreter
  */
 public class Interpreter {
     Robot robot;
-    List<String> commands = List.of("type");
-    public Map<Character, Integer> charToKeyboardMap;
+    List<Command> commands;
 
     public Interpreter(Robot robot) {
         this.robot = robot;
-        this.charToKeyboardMap = Stream
-                .concat(Stream.of(entry('.', KeyEvent.VK_PERIOD), entry(' ', KeyEvent.VK_SPACE)),
-                        IntStream.rangeClosed('a', 'z').mapToObj(x -> entry((char) x, x - 'a' + KeyEvent.VK_A)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.commands = List.of(new TypeCommand());
     }
 
     public void interpret(String text) {
-        var command = this.commands.stream().filter(x -> text.startsWith(x)).findFirst();
-        var args = text.substring(command.orElseThrow().length() + 1);
+        var command = this.commands.stream().filter(x -> text.startsWith(x.getName())).findFirst().orElseThrow();
+        var args = text.substring(command.getName().length() + 1);
 
         System.out.println("'" + args + "'");
-        for (int charUnicodeIndex : args.chars().toArray()) {
-            var character = (char) charUnicodeIndex;
-            type(robot, charToKeyboardMap.get(character));
-        }
+        command.execute(robot, args);
     }
 
-    private void type(Robot robot, int... keys) {
-        robot.delay(40);
-        Arrays.stream(keys).forEach(i -> robot.keyPress(i));
-        Arrays.stream(keys).forEach(i -> robot.keyRelease(i));
-    }
 }
